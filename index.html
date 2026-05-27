@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scout — Performance Update</title>
+<style>
+  /* === Outside brand palette === */
+  :root {
+    --outside-primary: #FFD100;
+    --outside-primary-dark: #E6BC00;
+    --outside-primary-light: #FFF3B0;
+    --outside-primary-alpha: rgba(255, 209, 0, 0.15);
+
+    --outside-secondary: #000000;
+    --outside-secondary-light: #1a1a1a;
+
+    --outside-accent: #333333;
+    --outside-text: #000000;
+    --outside-text-light: #555555;
+    --outside-text-muted: #666666;
+
+    --outside-bg: #F7F7F7;
+    --outside-bg-dark: #000000;
+    --outside-card-bg: #FFFFFF;
+    --outside-warm-bg: #fffbea;
+
+    --outside-border: #E0E0E0;
+    --outside-border-light: rgba(255, 255, 255, 0.1);
+
+    --outside-shadow-light: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --outside-shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --outside-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    --outside-gradient-dark: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+
+    --outside-font-stack: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+    --outside-radius-sm: 8px;
+    --outside-radius-md: 12px;
+    --outside-radius-lg: 16px;
+    --outside-radius-pill: 20px;
+
+    --outside-green: #2E7D5B;
+    --outside-red: #C0392B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--outside-bg-dark);
+    font-family: var(--outside-font-stack);
+    color: var(--outside-text);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .deck { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+  .slide {
+    position: absolute; inset: 0;
+    background: var(--outside-bg);
+    padding: 5vh 6vw;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .slide.active { display: flex; }
+  .slide.dark { background: var(--outside-gradient-dark); color: #FFFFFF; }
+  .slide.warm { background: var(--outside-warm-bg); }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2vh;
+    border-bottom: 1px solid var(--outside-border);
+    margin-bottom: 4vh;
+  }
+  .dark .topbar { border-color: var(--outside-border-light); }
+  .brand {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--outside-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+  .brand .mark {
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+    padding: 0.2em 0.6em;
+    border-radius: var(--outside-radius-sm);
+    font-weight: 800;
+  }
+  .brand .sub { color: var(--outside-text-light); font-weight: 600; }
+  .dark .brand { color: #FFFFFF; }
+  .dark .brand .sub { color: rgba(255,255,255,0.7); }
+  .topbar .meta {
+    font-family: var(--outside-font-stack);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--outside-text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .dark .topbar .meta { color: rgba(255,255,255,0.6); }
+
+  /* Typography */
+  h1.kicker {
+    color: var(--outside-text);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5vh;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  h1.kicker::before {
+    content: "";
+    display: inline-block;
+    width: 28px; height: 4px;
+    background: var(--outside-primary);
+    border-radius: 2px;
+  }
+  .dark h1.kicker { color: #FFFFFF; }
+
+  h1.title {
+    font-weight: 800;
+    font-size: clamp(2.4rem, 5.4vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 2.5vh;
+    color: var(--outside-text);
+  }
+  .dark h1.title { color: #FFFFFF; }
+
+  h2 {
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: 2vh;
+    color: var(--outside-text);
+  }
+  .dark h2 { color: #FFFFFF; }
+
+  p.lede {
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--outside-text-light);
+    max-width: 64ch;
+    margin-bottom: 2vh;
+  }
+  .dark p.lede { color: rgba(255,255,255,0.78); }
+
+  /* Title slide */
+  .title-slide {
+    background: var(--outside-gradient-dark);
+    color: #FFFFFF;
+    padding: 6vh 6vw;
+    justify-content: space-between;
+  }
+  .title-slide .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .title-slide .kicker {
+    color: var(--outside-primary);
+    font-size: 0.95rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 3vh;
+  }
+  .title-slide h1 {
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    max-width: 20ch;
+    color: #FFFFFF;
+  }
+  .title-slide h1 .accent { color: var(--outside-primary); }
+  .title-slide .deck-meta {
+    display: flex; gap: 3vw; margin-top: 5vh;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+  .title-slide .deck-meta .item .v { color: #FFFFFF; font-weight: 700; }
+
+  /* Compare grid */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    margin-top: 2vh;
+  }
+  .col {
+    background: var(--outside-card-bg);
+    padding: 2.2vw;
+    border-radius: var(--outside-radius-lg);
+    box-shadow: var(--outside-shadow-light);
+  }
+  .col.lab { border-top: 4px solid var(--outside-primary); }
+  .col.main { border-top: 4px solid var(--outside-border); background: var(--outside-card-bg); }
+  .col h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.4vh;
+    color: var(--outside-text-muted);
+    font-weight: 700;
+    padding-bottom: 0.8vh;
+    border-bottom: 3px solid var(--outside-border);
+  }
+  .col.lab h4 { color: var(--outside-text); border-bottom-color: var(--outside-primary); }
+  .col .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1vh 0;
+    border-bottom: 1px solid var(--outside-border);
+    font-size: 0.95rem;
+  }
+  .col .row:last-child { border-bottom: none; }
+  .col .row .yr {
+    font-weight: 700;
+    color: var(--outside-text);
+    background: var(--outside-primary);
+    padding: 0.18em 0.65em;
+    border-radius: var(--outside-radius-pill);
+    font-size: 0.78rem;
+  }
+  .col.main .row .yr { color: var(--outside-text-muted); background: var(--outside-border); }
+
+  /* Mechanism list */
+  .mech-list { margin-top: 2vh; }
+  .mech {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2vw;
+    align-items: center;
+    padding: 2.2vh 0;
+    border-bottom: 1px solid var(--outside-border-light);
+  }
+  .mech .rank {
+    font-size: 3rem;
+    color: var(--outside-primary);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .mech .body h4 {
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.4vh;
+    color: #FFFFFF;
+  }
+  .mech .body p { font-size: 0.94rem; color: rgba(255,255,255,0.75); line-height: 1.5; }
+  .mech .impact {
+    text-align: right;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .mech .impact .bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.12);
+    margin-top: 8px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .mech .impact .fill { height: 100%; background: var(--outside-primary); }
+
+  /* Query table */
+  table.queries {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2vh;
+    font-size: 0.92rem;
+    background: var(--outside-card-bg);
+    border-radius: var(--outside-radius-md);
+    overflow: hidden;
+    box-shadow: var(--outside-shadow-light);
+  }
+  table.queries th {
+    text-align: left;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--outside-text-muted);
+    padding: 1.6vh 1.2vw;
+    border-bottom: 3px solid var(--outside-primary);
+    font-weight: 700;
+    background: var(--outside-warm-bg);
+  }
+  table.queries td {
+    padding: 1.8vh 1.2vw;
+    border-bottom: 1px solid var(--outside-border);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  table.queries tr:last-child td { border-bottom: none; }
+  table.queries td.q { font-weight: 700; max-width: 22ch; color: var(--outside-text); }
+  table.queries td.main { color: var(--outside-text-muted); }
+  table.queries td.lab { color: var(--outside-text); }
+  table.queries td .yr-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    background: var(--outside-border);
+    padding: 0.12em 0.55em;
+    border-radius: var(--outside-radius-pill);
+    margin-right: 0.4em;
+    color: var(--outside-text-muted);
+    font-weight: 600;
+  }
+  table.queries td.lab .yr-tag {
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+  }
+
+  /* Pill / tag (matches .outside-tag) */
+  .pill {
+    display: inline-block;
+    padding: 0.32em 0.95em;
+    font-size: 0.82rem;
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+    border-radius: var(--outside-radius-pill);
+    font-weight: 700;
+    margin-right: 0.5em;
+  }
+  .pill.dark-tag { background: var(--outside-secondary); color: var(--outside-primary); }
+  .pill.outline {
+    background: transparent;
+    color: var(--outside-text);
+    box-shadow: inset 0 0 0 1.5px var(--outside-border);
+  }
+
+  /* Takeaways */
+  .takeaways {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vw 3vw;
+    margin-top: 2vh;
+  }
+  .takeaway {
+    background: var(--outside-warm-bg);
+    border-left: 4px solid var(--outside-primary);
+    padding: 1.6vh 1.6vw;
+    border-radius: 0 var(--outside-radius-md) var(--outside-radius-md) 0;
+  }
+  .takeaway .n {
+    color: var(--outside-text-muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.8vh;
+    font-weight: 700;
+  }
+  .takeaway h4 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.6vh;
+    line-height: 1.25;
+    color: var(--outside-text);
+  }
+  .takeaway p { color: var(--outside-text-light); line-height: 1.5; font-size: 0.94rem; }
+
+  /* Setup cards */
+  .setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3vw;
+    margin-top: 2vh;
+    flex: 1;
+    align-items: start;
+  }
+  .setup-card {
+    background: var(--outside-card-bg);
+    padding: 2.4vw;
+    border-radius: var(--outside-radius-lg);
+    box-shadow: var(--outside-shadow-light);
+  }
+  .setup-card h4 {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--outside-text);
+    text-transform: uppercase;
+    margin-bottom: 1.5vh;
+    font-weight: 700;
+    padding-bottom: 1vh;
+    border-bottom: 3px solid var(--outside-primary);
+  }
+  .setup-card ul { list-style: none; }
+  .setup-card li {
+    padding: 1vh 0;
+    border-bottom: 1px dashed var(--outside-border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.98rem;
+  }
+  .setup-card li:last-child { border-bottom: none; }
+  .setup-card li .k { color: var(--outside-text-light); }
+  .setup-card li .v { font-weight: 700; color: var(--outside-text); }
+
+  /* Cover upgrades list (slide 1) */
+  .cover-upgrades {
+    margin-top: 5vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2vw;
+    max-width: 95%;
+  }
+  .upg {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2vw;
+    padding-top: 2vh;
+    border-top: 3px solid var(--outside-primary);
+  }
+  .upg-num {
+    color: var(--outside-primary);
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+  .upg-name {
+    color: #FFFFFF;
+    font-size: clamp(1.4rem, 1.8vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* Harness diagram (slide 9 takeaway) */
+  .harness-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(7vh, auto);
+    gap: 1vw;
+    margin-top: 2vh;
+  }
+  .h-block {
+    background: var(--outside-card-bg);
+    border-radius: var(--outside-radius-md);
+    padding: 1.4vh 0.8vw;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.92rem;
+    box-shadow: var(--outside-shadow-light);
+    border-top: 3px solid var(--outside-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.25;
+    color: var(--outside-text);
+    position: relative;
+  }
+  .h-block.h-highlight {
+    border-top-color: var(--outside-primary);
+    background: var(--outside-warm-bg);
+  }
+  .h-block.h-tall {
+    grid-row: span 2;
+    border-top-color: var(--outside-primary-dark);
+  }
+  .h-block .h-sub {
+    display: block;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: var(--outside-text-muted);
+    margin-top: 1.2vh;
+  }
+  .h-tag {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+    font-size: 0.66rem;
+    padding: 0.18em 0.75em;
+    border-radius: var(--outside-radius-pill);
+    white-space: nowrap;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .h-tag.update {
+    background: var(--outside-card-bg);
+    color: var(--outside-secondary);
+    box-shadow: inset 0 0 0 1.5px var(--outside-primary);
+  }
+  .h-model-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5vw;
+    position: relative;
+  }
+  .h-model {
+    background: var(--outside-secondary);
+    color: var(--outside-primary);
+    padding: 0.9vh 1.4vw;
+    border-radius: var(--outside-radius-sm);
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .h-model .h-sub-mini {
+    display: block;
+    font-weight: 500;
+    font-size: 0.65rem;
+    color: rgba(255,209,0,0.7);
+    margin-top: 0.2vh;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Category grid (slide 2) */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.8vw;
+    margin-top: 2vh;
+  }
+  .cat-card {
+    background: var(--outside-card-bg);
+    padding: 1.8vw;
+    border-radius: var(--outside-radius-lg);
+    box-shadow: var(--outside-shadow-light);
+    border-top: 4px solid var(--outside-primary);
+    display: flex;
+    flex-direction: column;
+  }
+  .cat-card .cat-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 1vh;
+    border-bottom: 1px solid var(--outside-border);
+    margin-bottom: 1.4vh;
+  }
+  .cat-card .cat-name {
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    color: var(--outside-text);
+  }
+  .cat-card .cat-count {
+    font-size: 0.78rem;
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+    padding: 0.2em 0.7em;
+    border-radius: var(--outside-radius-pill);
+    font-weight: 700;
+  }
+  .cat-card .cat-desc {
+    font-size: 0.94rem;
+    color: var(--outside-text-light);
+    line-height: 1.5;
+    margin-bottom: 1.5vh;
+  }
+  .cat-card .cat-samples {
+    margin-top: auto;
+    padding-top: 1vh;
+    border-top: 1px dashed var(--outside-border);
+  }
+  .cat-card .sample {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    padding: 0.35vh 0;
+    color: var(--outside-text);
+    line-height: 1.4;
+  }
+  .cat-card .sample::before {
+    content: "\2192  ";
+    color: var(--outside-primary-dark);
+    font-weight: 700;
+  }
+
+  /* Headline KPI row */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+    margin: 2vh 0 3vh 0;
+  }
+  .kpi {
+    padding: 2vw;
+    background: var(--outside-card-bg);
+    border-radius: var(--outside-radius-lg);
+    box-shadow: var(--outside-shadow-light);
+    border-top: 4px solid var(--outside-primary);
+  }
+  .kpi .cat {
+    letter-spacing: 0.08em;
+    color: var(--outside-text-muted);
+    font-size: 0.82rem;
+    margin-bottom: 1vh;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .kpi .nums {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45em;
+    margin-bottom: 0.8vh;
+  }
+  .kpi .nums .before {
+    font-size: 1.6rem;
+    color: var(--outside-text-muted);
+    text-decoration: line-through;
+    font-weight: 600;
+  }
+  .kpi .nums .arrow { color: var(--outside-text); font-size: 1.3rem; font-weight: 700; }
+  .kpi .nums .after {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--outside-text);
+    letter-spacing: -0.02em;
+    text-shadow: 3px 3px 0 var(--outside-primary);
+  }
+  .kpi .desc { font-size: 0.92rem; color: var(--outside-text-light); line-height: 1.45; margin-top: 0.5vh; }
+
+  /* Code-ish callouts */
+  .code-callout {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    background: var(--outside-primary-alpha);
+    padding: 0.15em 0.5em;
+    border-radius: var(--outside-radius-sm);
+    font-size: 0.92em;
+    color: var(--outside-text);
+    font-weight: 600;
+  }
+  .dark .code-callout { background: var(--outside-primary-alpha); color: var(--outside-primary); }
+
+  .case-box {
+    margin-top: 2vh;
+    padding: 2.4vh 2vw;
+    background: var(--outside-card-bg);
+    border-left: 4px solid var(--outside-primary);
+    border-radius: 0 var(--outside-radius-lg) var(--outside-radius-lg) 0;
+    box-shadow: var(--outside-shadow-light);
+  }
+  .case-box .q-label {
+    font-size: 0.75rem;
+    color: var(--outside-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5vh;
+    font-weight: 700;
+  }
+  .case-box .q-text {
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin-bottom: 1.5vh;
+    line-height: 1.25;
+    color: var(--outside-text);
+  }
+  .case-box .q-text::before { content: "\201C"; color: var(--outside-primary); margin-right: 0.05em; }
+  .case-box .q-text::after { content: "\201D"; color: var(--outside-primary); margin-left: 0.05em; }
+
+  .fineprint {
+    font-size: 0.78rem;
+    color: var(--outside-text-muted);
+    margin-top: 1.5vh;
+    line-height: 1.55;
+  }
+
+  /* Footer / progress */
+  .footer {
+    position: absolute;
+    bottom: 2.5vh;
+    left: 6vw;
+    right: 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.76rem;
+    color: var(--outside-text-muted);
+    pointer-events: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .dark .footer { color: rgba(255,255,255,0.5); }
+  .footer .right { display: flex; gap: 1.2em; align-items: center; }
+  .progress {
+    width: 25vw;
+    height: 3px;
+    background: var(--outside-border);
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .dark .progress { background: rgba(255,255,255,0.15); }
+  .progress .bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--outside-primary);
+    transition: width 0.3s ease;
+  }
+
+  /* Nav */
+  .nav {
+    position: fixed;
+    bottom: 1.8vh;
+    right: 6vw;
+    display: flex;
+    gap: 0.5em;
+    z-index: 100;
+    pointer-events: auto;
+  }
+  .nav button {
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: var(--outside-shadow-light);
+  }
+  .nav button:hover { background: var(--outside-primary-dark); transform: translateY(-2px); }
+  .nav button:disabled { background: var(--outside-border); cursor: not-allowed; color: var(--outside-text-muted); transform: none; }
+
+  .slide-body { flex: 1; display: flex; flex-direction: column; }
+
+  /* Closing slide */
+  .closing {
+    background: var(--outside-primary);
+    color: var(--outside-secondary);
+  }
+  .closing h1.title { color: var(--outside-secondary); }
+  .closing .topbar { border-color: rgba(0,0,0,0.2); }
+  .closing .brand { color: var(--outside-secondary); }
+  .closing .brand .mark { background: var(--outside-secondary); color: var(--outside-primary); }
+  .closing .brand .sub { color: rgba(0,0,0,0.6); }
+  .closing p.lede { color: rgba(0,0,0,0.78); }
+  .closing .footer { color: rgba(0,0,0,0.6); }
+  .closing .topbar .meta { color: rgba(0,0,0,0.6); }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- Slide 1: Title -->
+  <section class="slide title-slide active" data-section="Cover">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta" style="color: rgba(255,255,255,0.6);">Performance update · May 2026</div>
+    </div>
+    <div class="hero">
+      <h1>Three <span class="accent">upgrades</span> shipped.</h1>
+      <div class="cover-upgrades">
+        <div class="upg">
+          <span class="upg-num">01</span>
+          <span class="upg-name">Smarter retrieval</span>
+        </div>
+        <div class="upg">
+          <span class="upg-num">02</span>
+          <span class="upg-name">Trailforks MCP integration</span>
+        </div>
+        <div class="upg">
+          <span class="upg-num">03</span>
+          <span class="upg-name">Chat history sidebar</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer" style="color: rgba(255,255,255,0.5);">
+      <div></div>
+      <div class="right"><span>1 / 9</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 2: Our first eval -->
+  <section class="slide warm" data-section="Setup">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">02 — Evals</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">How we know what works</h1>
+      <h2>Scout's First Eval System.</h2>
+      <p class="lede">One scores <strong style="color:var(--outside-text);">retrieval</strong> with rule-based code. The other scores the <strong style="color:var(--outside-text);">whole agent's answer</strong> with an LLM-as-judge. Both run on a fixed set of queries so any change is measurable.</p>
+
+      <div class="cat-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="cat-card">
+          <div class="cat-head">
+            <span class="cat-name">RAG eval</span>
+            <span class="cat-count">rule-based</span>
+          </div>
+          <p class="cat-desc">Runs queries through retrieval, then code inspects the top-K for freshness, topical match, and dupes. Used to validate retrieval changes (results · slide 3, deep dives · slides 4–8).</p>
+          <p style="font-size:0.82rem;color:var(--outside-text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;margin: 0.5vh 0 0.8vh 0;">10 queries · 3 categories</p>
+          <div class="cat-samples">
+            <div class="sample"><strong style="color:var(--outside-text);">Gear (4):</strong> "best hiking boots this year"</div>
+            <div class="sample"><strong style="color:var(--outside-text);">Factual-recent (2):</strong> "who won the tour de france most recently"</div>
+            <div class="sample"><strong style="color:var(--outside-text);">Evergreen (4):</strong> "how to train for your first marathon"</div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-head">
+            <span class="cat-name">Chat eval</span>
+            <span class="cat-count">LLM-as-judge</span>
+          </div>
+          <p class="cat-desc">Runs the full Scout agent (RAG + WebSearchTool + Trailforks MCP) per candidate model. A judge LLM scores the answer. Used to A/B-test models (results · slide 3).</p>
+          <p style="font-size:0.82rem;color:var(--outside-text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;margin: 0.5vh 0 0.8vh 0;">6 fixture queries · 5 dimensions</p>
+          <div class="cat-samples">
+            <div class="sample"><strong style="color:var(--outside-text);">Groundedness</strong> — sticks to retrieved content</div>
+            <div class="sample"><strong style="color:var(--outside-text);">Voice</strong> — matches Outside editorial tone</div>
+            <div class="sample"><strong style="color:var(--outside-text);">Helpfulness</strong> — actually answers the question</div>
+            <div class="sample"><strong style="color:var(--outside-text);">Tool use</strong> — calls the right tools, not always web</div>
+            <div class="sample"><strong style="color:var(--outside-text);">Overall</strong> — composite · also captures latency + tokens</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 22%;"></div></div><span>2 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 3: Combined eval results (RAG + Chat) -->
+  <section class="slide" data-section="Eval Results">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">03 — Eval results</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">What both evals told us</h1>
+      <h2>RAG retrieval got markedly fresher. Latest LLMs are not always better.</h2>
+
+      <p style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--outside-text-muted);font-weight:700;margin:2vh 0 1vh 0;">RAG eval · rule-based code eval</p>
+      <div class="kpi-row" style="margin: 0 0 2.5vh 0;">
+        <div class="kpi">
+          <div class="cat">Gear</div>
+          <div class="nums"><span class="after">4/4</span></div>
+          <div class="desc">Tied on pass rate, but top-K composition markedly fresher in AFTER.</div>
+        </div>
+        <div class="kpi">
+          <div class="cat">Factual / recent</div>
+          <div class="nums"><span class="before">0/2</span><span class="arrow">→</span><span class="after">2/2</span></div>
+          <div class="desc">Biggest unlock. Newest TdF coverage moved 2019 → 2024–2025.</div>
+        </div>
+        <div class="kpi">
+          <div class="cat">Evergreen</div>
+          <div class="nums"><span class="before">'23</span><span class="arrow">→</span><span class="after">'26</span></div>
+          <div class="desc">Median newest article in top-K shifted forward three years.</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--outside-text-muted);font-weight:700;margin:0 0 1vh 0;">Chat eval · LLM as a judge</p>
+      <div class="cat-grid">
+        <div class="cat-card" style="border-top-color: var(--outside-primary); padding: 1.4vw;">
+          <div class="cat-head" style="margin-bottom: 1vh;">
+            <span class="cat-name" style="font-size: 1.1rem;">gpt-4o-mini</span>
+            <span class="cat-count">current</span>
+          </div>
+          <p class="cat-desc" style="margin-bottom: 0.8vh;"><strong style="color:var(--outside-text);font-size:1.05rem;">Overall 4.5</strong> · 9.6s · 8.8k tok</p>
+          <p class="cat-desc" style="font-size:0.86rem;">Wins on judged quality. Ground 4.17 · Voice 4.83 · Helpful 4.67 · Tool 3.33</p>
+        </div>
+        <div class="cat-card" style="border-top-color: var(--outside-border); padding: 1.4vw;">
+          <div class="cat-head" style="margin-bottom: 1vh;">
+            <span class="cat-name" style="font-size: 1.1rem;">gpt-5.4-mini</span>
+            <span class="cat-count" style="background: var(--outside-border); color: var(--outside-text-muted);">candidate</span>
+          </div>
+          <p class="cat-desc" style="margin-bottom: 0.8vh;"><strong style="color:var(--outside-text);font-size:1.05rem;">Overall 4.0</strong> · 4.9s · 21k tok</p>
+          <p class="cat-desc" style="font-size:0.86rem;">~2× faster, burns ~2.4× tokens — calls <span class="code-callout">web_search</span> eagerly.</p>
+        </div>
+        <div class="cat-card" style="border-top-color: var(--outside-border); padding: 1.4vw;">
+          <div class="cat-head" style="margin-bottom: 1vh;">
+            <span class="cat-name" style="font-size: 1.1rem;">gpt-5.4-nano</span>
+            <span class="cat-count" style="background: var(--outside-border); color: var(--outside-text-muted);">candidate</span>
+          </div>
+          <p class="cat-desc" style="margin-bottom: 0.8vh;"><strong style="color:var(--outside-text);font-size:1.05rem;">Overall 4.0</strong> · 5.2s · 19k tok</p>
+          <p class="cat-desc" style="font-size:0.86rem;">Similar profile to 5.4-mini. Same eager-tool-call pattern.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 33%;"></div></div><span>3 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 4: Factual recent deep dive (was slide 3) -->
+  <section class="slide warm" data-section="Factual">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">04 — Biggest unlock</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">Category · factual_recent</h1>
+      <h2>0/2 → 2/2. The most user-visible improvement in the run.</h2>
+
+      <div class="case-box">
+        <div class="q-label">Query</div>
+        <div class="q-text">who won the tour de france most recently</div>
+        <div class="compare" style="margin-top:1.5vh;">
+          <div class="col main">
+            <h4>BEFORE · zero 2020+ content</h4>
+            <div class="row"><span>#1 Bradley Wiggins</span><span class="yr">2012</span></div>
+            <div class="row"><span>#2 TdF recap</span><span class="yr">2017</span></div>
+            <div class="row"><span>#3 TdF analysis</span><span class="yr">2014</span></div>
+            <div class="row"><span>#4 TdF coverage</span><span class="yr">2019</span></div>
+          </div>
+          <div class="col lab">
+            <h4>AFTER · pool unlocked, rerank applied</h4>
+            <div class="row"><span>#1 VELO season takeaways</span><span class="yr">2025</span></div>
+            <div class="row"><span>#2 Pogačar Tour coverage</span><span class="yr">2024</span></div>
+            <div class="row"><span>#3 Giro-Tour double</span><span class="yr">2024</span></div>
+            <div class="row"><span>#4–#6 race-week reports</span><span class="yr">2024</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="fineprint">Why BEFORE missed: 2024 race-week VELO articles existed in the index, but TdF reports are semantically far from a natural-language record question. They scored below rank 4 on pure cosine and never entered the top-K. <span class="code-callout">top_k=40</span> brings them into the pool; recency rerank promotes them over the 2010–2019 articles with similar cosine scores.</p>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 44%;"></div></div><span>4 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 5: Gear category -->
+  <section class="slide" data-section="Gear">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">05 — Where binary metrics lie</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">Category · gear</h1>
+      <h2>BEFORE and AFTER both pass 4/4 — but the user-visible experience is very different.</h2>
+      <p class="lede">On gear queries, BEFORE's binary check looks fine. A 2026 article is in the top-4. But if you read the top-1 result — which is what users actually see — BEFORE often serves a stale ancillary piece while AFTER surfaces the current buyer's guide.</p>
+
+      <div class="case-box">
+        <div class="q-label">Query (BEFORE "passes" deceptively)</div>
+        <div class="q-text">best hiking boots this year</div>
+        <div class="compare" style="margin-top:1.5vh;">
+          <div class="col main">
+            <h4>BEFORE · passes the check, fails the user</h4>
+            <div class="row"><span>#1 "How to Break In Your Boots"</span><span class="yr">2021</span></div>
+            <div class="row"><span>#2 Boot care guide</span><span class="yr">2022</span></div>
+            <div class="row"><span>#3 Generic outdoor list</span><span class="yr">2023</span></div>
+            <div class="row"><span>#4 Boots buyer's guide</span><span class="yr">2026</span></div>
+          </div>
+          <div class="col lab">
+            <h4>AFTER · top-1 is what they came for</h4>
+            <div class="row"><span>#1 Hiking boots buyer's guide</span><span class="yr">2026</span></div>
+            <div class="row"><span>#2 Trail boots roundup</span><span class="yr">2026</span></div>
+            <div class="row"><span>#3 Lightweight boots picks</span><span class="yr">2025</span></div>
+            <div class="row"><span>#4 Boot care guide</span><span class="yr">2022</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="fineprint">Drivers: <span class="code-callout">dedup by item_url</span> + recency rerank push the 2026 roundups above older "how-to" content. Why dedup matters here: Pinecone holds multiple vectors per article — long pieces get chunked into ~400-token vectors. Without dedup, the top-K can be 4 chunks of the same 2021 article, with the 2026 buyer's guide invisible. Dedup collapses each URL to its best-scoring chunk; recency then promotes the 2026 piece. The year-injection rewrite also anchors the embedding on "2026".</p>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 56%;"></div></div><span>5 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 6: Rewrite showcase (marathon training) -->
+  <section class="slide warm" data-section="Rewrite">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">06 — Showcase · what query rewrite specifically solves</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">Category · evergreen</h1>
+      <h2>Bridge user language to article language.</h2>
+
+      <div class="case-box">
+        <div class="q-label">Query · evergreen</div>
+        <div class="q-text">how to train for your first marathon</div>
+        <div style="font-size: 0.92rem; color: var(--outside-text-light); margin: -0.5vh 0 1.8vh 0;">
+          Rewritten to → <span class="code-callout">training tips for first-time marathon runners in 2026</span>
+        </div>
+        <div class="compare" style="margin-top: 1vh;">
+          <div class="col main">
+            <h4>BEFORE · only 2 results cleared the threshold</h4>
+            <div class="row"><span>#1 The Best Advice For First Time Marathoners</span><span class="yr">2015-12</span></div>
+            <div class="row"><span>#2 Yes You Can: Run the NYC Marathon</span><span class="yr">2010-02</span></div>
+          </div>
+          <div class="col lab">
+            <h4>AFTER · 6 results, with the rewrite win at #2</h4>
+            <div class="row"><span>#1 10 Reasons to Be Excited About Running in 2025</span><span class="yr">2025-01</span></div>
+            <div class="row"><span>#2 5 Marathon Training Resolutions Coaches Wish You'd Make</span><span class="yr">2024-10</span></div>
+            <div class="row"><span>#3 8 Ways to Supercharge Your Running</span><span class="yr">2024-06</span></div>
+            <div class="row"><span>#5 Steal These Tips From Top Marathoners</span><span class="yr">2022-01</span></div>
+            <div class="row"><span>#6 The Best Advice For First Time Marathoners (was #1)</span><span class="yr">2015-12</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="fineprint">Why this is the canonical rewrite case: the user says "how to train"; the 2024 editorial piece is titled "Training Resolutions Coaches Wish You'd Make" — semantically related but lexically very different. Pure cosine on the raw query buries it. The rewrite to "training tips for first-time marathon runners" shares the "training tips" stem with "Training Resolutions" — a much closer cosine match. <strong style="color: var(--outside-text);">A wider candidate pool alone wouldn't have lifted this past the 2015 article whose title literally contains the user's wording.</strong> Rewrite is what changed the embedding direction enough for the modern editorial style to win.</p>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 67%;"></div></div><span>6 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 7: Mechanisms / techniques -->
+  <section class="slide dark" data-section="Mechanisms">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">07 — What's actually doing the work</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">The four techniques</h1>
+      <h2>Key drivers for retrieval improvements.</h2>
+
+      <div class="mech-list">
+        <div class="mech">
+          <div class="rank">01</div>
+          <div class="body">
+            <h4>Wider candidate pool (top_k 4 → 40)</h4>
+            <p>Most "missing recent content" cases were relevant 2024+ articles ranked just outside top-4 on pure cosine. Widening the pool brings them into reranking range.</p>
+          </div>
+        </div>
+        <div class="mech">
+          <div class="rank">02</div>
+          <div class="body">
+            <h4>Recency-weighted rerank (0.7·sim + 0.3·decay, 365d)</h4>
+            <p>Once recent items are in the pool, the blended score lifts them above similarly-scored older items — without ignoring semantic relevance.</p>
+          </div>
+        </div>
+        <div class="mech">
+          <div class="rank">03</div>
+          <div class="body">
+            <h4>Dedup by item_url</h4>
+            <p>One article can sit in Pinecone as 12+ vectors (chunks of long pieces + leftover chunks from indexer re-runs). Dedup collapses each item_url to its best-scoring chunk — turning the wider pool into <strong style="color:#FFFFFF;">more distinct articles</strong>, not 40 chunks of the same three.</p>
+          </div>
+        </div>
+        <div class="mech">
+          <div class="rank">04</div>
+          <div class="body">
+            <h4>LLM query rewrite (paraphrase + year + entity normalization)</h4>
+            <p><strong style="color:#FFFFFF;">Paraphrases</strong> user wording into editorial wording (marathon showcase, Slide 6). <strong style="color:#FFFFFF;">Injects the current year</strong> so "this year" anchors to 2026 (drove the 2026 TdF outlook). <strong style="color:#FFFFFF;">Normalizes entities</strong> — "Yosemite Valley" matched a broader National Parks roundup.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 78%;"></div></div><span>7 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 8: Evergreen + per-query overview -->
+  <section class="slide" data-section="Evergreen">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">08 — Per-query highlights</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">Key Factors · per-query view</h1>
+      <h2>Before vs After</h2>
+
+      <table class="queries">
+        <thead>
+          <tr>
+            <th style="width: 22%;">Query</th>
+            <th style="width: 30%;">BEFORE</th>
+            <th style="width: 30%;">AFTER</th>
+            <th>Driver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="q">best hikes in Yosemite valley</td>
+            <td class="main"><span class="yr-tag">2022</span>Outside "13 Best Hikes in Yosemite Valley"<br><span class="yr-tag">2009</span>Backpacker trip report at #2</td>
+            <td class="lab"><span class="yr-tag">2025-03</span>"62 Best Things to Do in National Parks"</td>
+            <td>Query rewrite normalized "Yosemite Valley" → "Yosemite Valley, California, 2026"</td>
+          </tr>
+          <tr>
+            <td class="q">best running shoes for 2026</td>
+            <td class="main"><span class="yr-tag">2025</span>OutsideRun<br><span class="yr-tag">2022</span>off-topic "Inspiring Moments" at #4</td>
+            <td class="lab"><span class="yr-tag">2026-05</span>"Tested Stability Shoes for 26 Years"<br>5 of 6 results 2024+</td>
+            <td>Wider pool + rerank + query rewrite</td>
+          </tr>
+          <tr>
+            <td class="q">most Tour de France wins / record holder</td>
+            <td class="main"><span class="yr-tag">2016</span>VELO "Mark Cavendish takes 30th stage win"<br>no 2020+ content at all</td>
+            <td class="lab"><span class="yr-tag">2026-01</span>VELO "2026 Could Be the Biggest Record-Breaking Season in Pro Cycling History"</td>
+            <td>Year injection + entity normalization in the query rewrite</td>
+          </tr>
+          <tr>
+            <td class="q">best hiking boots this year</td>
+            <td class="main"><span class="yr-tag">2021</span>"How to Break In" at #1</td>
+            <td class="lab"><span class="yr-tag">2026</span>#1 and #2 are both buyer's guides</td>
+            <td>Dedup + recency rerank + year-fix anchors rewrite on "2026"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 89%;"></div></div><span>8 / 9</span></div></div>
+  </section>
+
+  <!-- Slide 9: The bigger takeaway -->
+  <section class="slide" data-section="Takeaway">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">09 — The bigger picture</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">The takeaway</h1>
+      <h2>An agentic system isn't a model. It's the harness around one.</h2>
+      <p class="lede">A decade ago, the Sculley paper made the point that ML code was a sliver of any real ML system — dwarfed by data plumbing, infrastructure, and monitoring. The same is true for agentic products today. The LLM is one small block in a much bigger stack, and capability comes from what you build around it.</p>
+
+      <div class="harness-grid">
+        <div class="h-block">Prompts<br/>+ Skills<br/><span class="h-sub"> subagents, commands</span></div>
+        <div class="h-block">Agent Traces<br/>Collection</div>
+        <div class="h-block h-highlight">
+          <div class="h-tag update">update</div>
+          Agent<br/>Harness
+        </div>
+        <div class="h-block h-highlight">
+          <div class="h-tag">new</div>
+          Tools<br/><span class="h-sub"> APIs · Trailforks MCP</span>
+        </div>
+
+        <div class="h-block h-highlight">
+          <div class="h-tag update">update</div>
+          Retrieval<br/><span class="h-sub"> RAG + recency rerank</span>
+        </div>
+        <div class="h-model-cell">
+          <div class="h-model">LLM<span class="h-sub-mini">agentic model</span></div>
+        </div>
+        <div class="h-block h-highlight">
+          <div class="h-tag">new</div>
+          Evaluation<br/>Infra
+        </div>
+        <div class="h-block h-tall">Agent<br/>Serving<br/>Infrastructure</div>
+
+        <div class="h-block h-highlight">
+          <div class="h-tag">new</div>
+          Memory<br/>Management<br/><span class="h-sub"> chat history sidebar</span>
+        </div>
+        <div class="h-block">Model<br/>Serving</div>
+        <div class="h-block">Monitoring</div>
+      </div>
+
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 100%;"></div></div><span>9 / 9</span></div></div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev" aria-label="Previous slide">&#8249;</button>
+  <button id="next" aria-label="Next slide">&#8250;</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let idx = 0;
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+
+  function show(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, j) => s.classList.toggle('active', j === idx));
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === slides.length - 1;
+  }
+
+  prevBtn.addEventListener('click', () => show(idx - 1));
+  nextBtn.addEventListener('click', () => show(idx + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(idx + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(idx - 1); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(slides.length - 1); }
+  });
+
+  show(0);
+</script>
+</body>
+</html>
