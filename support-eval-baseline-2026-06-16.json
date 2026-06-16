@@ -1,0 +1,118 @@
+[
+  {
+    "model": "gpt-4o-mini",
+    "id": "support-cancel-membership",
+    "category": "support",
+    "expect_tool": "search_help_center",
+    "query": "How do I cancel my Outside+ membership?",
+    "answer": "To cancel your Outside+ membership, follow these steps:\n\n1. **Go to Your Subscription Page**: [Click here to access your subscription page](https://www.outsideonline.com) or visit www.outsideonline.com.\n2. **Sign In**: Log into your account.\n3. **Access Your Profile**: Click on the Profile Icon in the upper right corner.\n4. **Go to Subscription**: Select \"SUBSCRIPTION\" and then \"MANAGE SUBSCRIPTION.\"\n5. **Acknowledge the Cancellation**: Check the acknowledgment box, then proceed with the cancellation.\n\nAfter you cancel, your membership will remain active until the end of the current billing period, but auto-renewal will be stopped.\n\nIf you purchased your subscription through the Apple App Store, Google Play, or other platforms, you'll need to cancel directly through those services. \n\nIf you have further questions or run into issues, feel free to ask!",
+    "latency": 4.57,
+    "usage": {
+      "input_tokens": 6455,
+      "output_tokens": 216,
+      "total_tokens": 6671,
+      "model_calls": 2
+    },
+    "tools": [
+      "search_help_center"
+    ],
+    "tool_output": "\nThis article explains how to cancel your Outside Plus membership to stop auto-renewal while retaining access until the period ends. You can cancel via the subscription page or profile settings on outsideonline.com. If purchased through Apple App Store, Google Play, Gaia GPS, Trailforks, or MapMyFitness, cancel through those platforms using provided links. Canceling your subscription will stop it from auto-renewing. You will still have access to your membership through the remainder of the payment period. To cancel your Outside Plus membership please follow these steps: Click here to be taken to your subscription page Alternatively, sign into www.outsideonline.com and then follow these steps: Click the Profile Icon in the upper right corner of your screen Click on SUBSCRIPTION. Click MANAGE SUBSCRIPTION After checking the acknowledgement box, you can proceed with the cancelation This process only cancels the auto-renewal of your membership. It does not cancel it immediately. You will still have access to Outside Plus benefits until your membership expires. I don't see the 'Manage Subscription' button under Profile > Subscription. How do I cancel my subscription? If you do not see the option to 'Manage Subscription' in the subscription section, it could be that you purchased your Outside Plus membership on a mobile platform. If you have a membership from the Apple App Store or Google Play Store and you would like to cancel, please follow these steps: Google Play Store Apple App Store I bought my Outside Plus subscription via Gaia GPS, Trailforks or MapMyFitness. How do I cancel my subscription? You may also not see the option to 'Manage Subscription' if you have purchased your Outside\nwill ONLY cancel the scheduled subscription change. Going through this cancellation flow will CANCEL only your scheduled\n\nsubscription change. If you wish to also cancel your current Outside+ membership, you will need to first cancel your scheduled subscription change. Then, you will need to follow the steps once more to cancel your current Outside+ membership. If your Outside+ membership states ACTIVE, your auto-renewal is NOT cancelled.\nmembership from Outside+ to Outside Digital, please see the following options: If you are writing in within\n\n14 days of purchase or renewal, we are able to offer you a full refund on your purchase of the Outside+ membership. After canceling your membership, you can re-sign up for the Outside Digital membership here . If you are writing in outside of the 14 days of purchase or renewal, we are unable to offer any refunds on the purchase of the Outside+ membership. To change your membership, we provide the following options: A. If you are in an Outside+ membership that was purchased AFTER March 1st, 2024, you have the ability as a user to switch your membership from Outside+ to Outside digital. Please see this article on how to switch your membership on your account. B. If you are in an Outside+ membership that was purchased PRIOR to March 1st, 2024, we will cancel the auto-renewal of your current membership. After your membership expires, you can re-sign up for an Outside Digital membership here . Gaia GPS and Trailforks Memberships Upgrade from Gaia GPS to Outside+ For instructions on changing your Gaia GPS membership, please see this article . Upgrade from Trailforks to Outside+ For instructions on changing your Trailforks membership, please see this article . Multiple Memberships If you have purchased multiple memberships, please see this article .\nyour current membership : To cancel your Trailforks Pro or Pro with Outside+ subscription purchased directly through\n\nTrailforks, please do so via the Trailforks website . 1. Select the Profile Icon. 2. Select Settings. 3. Select Pro Subscription 4. Select Cancel . Once you have cancelled the auto-renewal of your current Trailforks Pro with Outside+ membership, you can purchase the Trailforks stand-alone membership here . Note : Depending on when your membership renew",
+    "tool_hit": true,
+    "judge": {
+      "groundedness": 5.0,
+      "voice": 5.0,
+      "helpfulness": 5.0,
+      "tool_use": 5.0,
+      "overall": 5.0,
+      "rationale": "The assistant provided a clear, concise, and accurate answer based on the tool outputs, using the appropriate tool for the question."
+    },
+    "error": null
+  },
+  {
+    "model": "gpt-4o-mini",
+    "id": "support-billing-refund",
+    "category": "support",
+    "expect_tool": "search_help_center",
+    "query": "I was charged twice for my subscription. How do I get a refund?",
+    "answer": "To address the double charge on your subscription, here are the steps you should follow based on how you purchased it:\n\n### If You Used the Apple App Store:\n1. **Request a Refund:**\n   - Go to [Apple\u2019s Problem Reports page](https://www.apple.com/support/apple-id/manage/).\n   - Log in with your Apple ID.\n   - From the drop-down menu, select \"Request a refund.\"\n   - Choose the reason for the request and select Gaia GPS, then click submit.\n2. **Additional Note:** If you can\u2019t find eligible purchases for a refund, you may need to contact Apple support for further assistance.\n\n### If You Used Google Play:\n1. **Cancel Your Subscription:** \n   - Open the Google Play Store app > Tap on your profile > Payments & Subscriptions > Subscriptions > MapMy > Cancel Subscription.\n2. **Request a Refund:**\n   - Open the Google Play Store app > Tap your profile > Help & Feedback > Request your Google Play Refund.\n   - Alternatively, you can also request a refund from the [Google Play website](https://play.google.com/store/account).\n\n### If You Purchased Directly from GaiaGPS.com:\n- Please contact their support directly for assistance with your refund.\n\nKeep in mind that refund requests can take a few days to process, and you may need to provide details like your order number when contacting support. If you have any further issues, consider reaching out to the support team directly for more personalized help.",
+    "latency": 7.4,
+    "usage": {
+      "input_tokens": 6303,
+      "output_tokens": 323,
+      "total_tokens": 6626,
+      "model_calls": 2
+    },
+    "tools": [
+      "search_help_center"
+    ],
+    "tool_output": "\nThis article will show you how to get a refund for a subscription purchased through the Apple App Store, the Google Play Store, or the Gaia GPS website. Apple Apple does not allow our team to provide you a refund directly. You can request a refund directly from the App Store by following the steps listed below. To get a refund, you will need a valid reason for the request like you bought a Membership by accident or the app doesn\u2019t do what you need it to. Typically, they take a day or two to process the request, and you may need to contact Apple support to verify the reason for the request. Get a Refund: Go to Apple\u2019s Problem Reports page . Login with your Apple ID From the \"What can we help you with?\" drop-down box, select \"Request a refund\" From the \"Tell us more\" drop down, select a reason Select Gaia GPS and click submit. Note : If the message says none of your purchases are eligible for a refund, contact us directly here . Refunding the app does not automatically cancel your subscription. You can cancel your subscription by following these steps : https://support.apple.com/en-us/HT202039. Google 1. Cancel your current subscription through Google so it will not auto-renew. 2. Request a refund with these steps . Note : If you are unable to receive a refund from Google, please contact us directly here . GaiaGPS.com To get a refund for a subscription purchased on gaiagps.com, please contact us directly here . If you purchased a Gaia GPS membership on gaiagps.com or through GooglePlay, you may be entitled to receive a full refund within fourteen (14) days of purchase or renewal . Beyond that time frame, a Gaia GPS subscription is typically non-refundable. For more information, please see this article .\n), you will have to cancel the auto-renewal of that subscription through the app itself.\n\nWe are unable to refund any subscriptions purchased through apps. You will have to contact the support teams for Google Play, iOS, or the app platform directly to request a refund. For instructions on canceling or changing a trial subscription bought via the Gaia GPS app, please visit this article . For instructions on canceling or changing a membership bought via the Trailforks app, please visit this article.\nThe Outside CS team does not have the ability to cancel or refund any purchases made on the +Play\n\naccount. If you have purchased a membership directly on our platform via Outsideonline.com, then we will be able to cancel your subscription and issue you a refund. Any refunds for purchases made via your +Play account will need to be managed by the Verizon Customer Support team.\nIf you upgraded to an MVP Membership via an Android in-app purchase, you can cancel your subscription directly from the Google Play Store App. Please follow the steps below: Open Google Play Store App > Tap on profile > Payments & Subscriptions > Subscriptions > MapMy > Cancel Subscription. If you would like to request a refund via the Google Play Store App please follow the steps below: Open the Google Play Store App > Tap on profile > Tap Help & Feedback > Tap Request your Google Play Refund. You can also request a refund from the Google Play website here . If you have issues requesting this refund through Google Play, you can also contact our support team to investigate by submitting a support request here . Please provide us with the order number that begins with GPA that is associated with your purchase. This can be found in the email from Google Play confirming your purchase or in your Google account history.",
+    "tool_hit": true,
+    "judge": {
+      "groundedness": 5.0,
+      "voice": 5.0,
+      "helpfulness": 5.0,
+      "tool_use": 5.0,
+      "overall": 5.0,
+      "rationale": "The assistant provided a clear, concise, and well-grounded response using the appropriate tool outputs to guide the user on how to request a refund based on their purchase platform."
+    },
+    "error": null
+  },
+  {
+    "model": "gpt-4o-mini",
+    "id": "support-account-login",
+    "category": "support",
+    "expect_tool": "search_help_center",
+    "query": "I can't log in to my Outside account and need to reset my password.",
+    "answer": "To reset your Outside account password, follow these steps:\n\n1. **Request a Password Reset**: Visit the [password reset page](https://www.gaiagps.com/user/password/reset/) and enter your email address associated with your account. \n\n2. **Check Your Email**: You will receive an email with a link and instructions. If you don't see it, check your spam or junk folders.\n\n3. **Set a New Password**: Follow the link in the email to set a new password.\n\nOnce you\u2019ve reset your password, you can log in to your account on any of the Outside brand sites. If you still encounter issues, consider submitting a support ticket for further assistance.",
+    "latency": 608.11,
+    "usage": {
+      "input_tokens": 6442,
+      "output_tokens": 160,
+      "total_tokens": 6602,
+      "model_calls": 2
+    },
+    "tools": [
+      "search_help_center"
+    ],
+    "tool_output": "\nI can't log in, how can I reset my password to access my account? If you forgot your password or you are locked out of your account, please enter your email address here to reset your password. You will soon receive an email with a link and instructions to reset your password. If you do not see the email in your regular inbox, please check your spam and junk folders. After you have reset your password, you can log in here or on any of our brand sites. I am already logged in, how can I set a new password? Go to your account by clicking on the icon in the top right corner, and click on Settings. From Settings, click on 'Manage My Account.' Here, you'll have the option to change your email or change your password. Does this change my password for Gaia GPS and Trailforks too? Yes, you can use your new password for Gaia GPS and Trailforks since they are both part of the Outside Network. Your Outside+ credentials should connect with both your Gaia GPS and Trailforks account. If you are having issues with merging an existing Gaia GPS or Trailforks account, please visit this article .\nIf you have forgotten your password, you can enter your email address here to receive a reset form via email: https://www.gaiagps.com/user/password/reset/ To update your password when logged in, go here: https://www.gaiagps.com/user/password/change/\nIf you're having trouble logging in or accessing your MapMy account, you can reset your account password by following the steps below: Request a password reset email by clicking here . Enter the email address associated with your MapMy account. If you created your account via Facebook or Apple, enter the email address associated with that account. Click \"Reset Password\". Check your inbox for an email with a link to reset your password. If you can't locate the email, check your spam, junk, or promotion filters, as your inbox may have incorrectly sorted it. If you still can't locate the reset email, it's possible that the email address you entered is not associated with a MapMy account. Check Your iOS Device's Date and Time Settings If you can log in to the website but are locked out of the iOS app, check your phone's date and time settings. Our login page requires a valid timestamp, so make sure your settings are correct. For iOS devices : Settings > General > Date & Time and turn on Set Automatically. Further Help with Password Resets If you're still having issues getting into your account, please submit a support ticket here and include the following information: Any potential email address(es) tied to your MapMy account(s) Your first and last name as it appears on MapMy account(s) Location (Country, State, City) that MapMy account holder resided in and set in profile settings Date of birth listed on your account\nIf you\u2019re having trouble logging in to your Pinkbike account, you can reset your password by following the steps below. How to Reset Your Password Visit the password reset page here . As a reminder, your Trailforks account is connected with your Pinkbike account. You can use the same credentials to log into both sites. When you create a Pinkbike account, you also create an account on trailforks.com. Enter your registered Pinkbike email address and follow the prompts. Check your inbox for a password reset email. The email will come from signup@pinkbike.com and will ask for a Verification Key provided in the email. If you do not receive the email, please check your junk and spam folders. Choose a new password to secure your account, and log in with your updated details. Troubleshooting Tips for Password Resets If you don\u2019t see a reset email, check your spam or junk folders. Make sure you use the same email associated with your Pinkbike account. Securing Your Pinkbike Experience Choosing a strong password safeguards your Pinkbike profile and helps protect your participation in community forums, Buy & Sell transactions, and in posting content. Use unique and memorable passwords for the best experience,",
+    "tool_hit": true,
+    "judge": {
+      "groundedness": 5.0,
+      "voice": 5.0,
+      "helpfulness": 5.0,
+      "tool_use": 5.0,
+      "overall": 5.0,
+      "rationale": "The assistant provided a clear, concise, and accurate response based on the tool outputs, effectively guiding the user through the password reset process."
+    },
+    "error": null
+  },
+  {
+    "model": "gpt-4o-mini",
+    "id": "support-perks-vs-benefits",
+    "category": "support",
+    "expect_tool": "search_help_center",
+    "query": "What's the difference between Outside+ perks and benefits?",
+    "answer": "The difference between Outside+ perks and benefits typically lies in their scope and functionality. \n\n### Benefits:\nThese are the core features you receive with an Outside+ membership. They include:\n- **Access to Digital Content:** This covers unlimited access to articles, gear reviews, expert advice, and adventure stories from a variety of publications within the network (like Outside, Backpacker, Women's Running, etc.).\n- **Streaming:** Members can stream adventure films and original series on Outside TV.\n- **Navigation Tools:** Benefits include powerful tools for planning, tracking, and navigating adventures using apps like Gaia GPS and Trailforks Pro.\n- **Exclusive Member Offers:** This includes deals and discounts from partner brands.\n\n### Perks:\nPerks are often limited-time offerings or special discounts that may change seasonally. Examples include:\n- **Seasonal Discounts:** Offers like discounted tickets for events or experiences (e.g., the Outside Festival).\n- **Partner Discounts:** Access to exclusive deals through various partner apps that require additional login steps to redeem.\n\nIn summary, benefits provide ongoing access to a variety of outdoor content and tools, while perks are more specific, often time-limited discounts or offers available to members. For updated information or specific perks, members can refer to the \"My Benefits\" section on the Outside website.",
+    "latency": 5.19,
+    "usage": {
+      "input_tokens": 8837,
+      "output_tokens": 283,
+      "total_tokens": 9120,
+      "model_calls": 2
+    },
+    "tools": [
+      "search_help_center"
+    ],
+    "tool_output": "\nAs an Outside+ member, you are able to view the current Outside+ member perks under My Benefits > Member Perks. Under Member Perks, you can see current discount offerings for our Outside+ members, such as discounted tickets for the Outside Festival . The discount offerings under Member Perks may change seasonally, and if you notice that an offer is no longer available under Member Perks, then the discount period has ended for that particular offer. We will be updating the partnership perks available in this section periodically, so be sure to check out this page when looking for special Outside+ member perks! The redemption instructions are listed under each Member Perk. With certain member perks, such as with KAYA PRO or GOES HEALTH , you will be prompted via the partner app to sign in with your Outside+ account in order to redeem the offer. The partnership discount is available for the first year of membership with the partner app. Clicking on 'Redeem Benefit' will lead you to a page on the partner's website that walks you through redeeming the benefit as an Outside+ member. Once you download the partner app (for example, with the KAYA and GOES discount offering), you will have the option to \"Connect with Outside.\" If you have not yet signed into your Outside+ account on outsideonline.com, you'll be routed to a page where you will have the option to sign in with your Outside+ credentials. IMPORTANT : For the smoothest authorization process, we recommend signing into outsideonline.com with your Outside+ credentials before opening up the partner app offer and redeeming the discount. You'll have the option to 'authorize' the connection: Example for GOES Once your\nWhat is Outside+? What do I get with Outisde+? It's your ultimate adventure toolkit. Get inspired with unlimited digital content and 24/7 streaming\u2014then get outside with premium access to powerful GPS apps. Outside+ brings together all the benefits across our network into one all-access membership. Outside+ benefits include all this and more: Fuel your next adventure with unlimited digital content , including gear reviews, expert advice, destination guides, and adventure stories from Outside, Backpacker, RUN, Yoga Journal, and more publications . Get inspired with unlimited adventure films, original series, and live events on Outside TV . Plan, track, and navigate your next adventure with powerful route building tools and offline maps with Gaia GPS Premium . Find more fun on the dirt with Trailforks Pro , featuring the world\u2019s largest collection of trails. Stay motivated and level up with advanced insights, exclusive challenges, and more with MapMyFitness . Get exclusive deals with partner brands and discounts on events when you sign up for an Outside+ membership. Our goal is to deliver best-in-class content while inspiring you to do the activities you love, more often, and with greater knowledge and enjoyment. Learn more and upgrade to Outside+ here.\nemail: If you already have a free account with us, you will need to sign in to your\n\nfree account and then click \"Join Outside+.\" If you don't sign in before you click on your email link, you will be directed to sign in before you can proceed to the checkout page. If you can't remember your password, you can click \"forgot password.\" After you have logged in, you will be directed to a checkout page with your free offer automatically applied and your total amount at $0. Please note: Our payment processing system requires a credit card, even if you have a 100% off promo code. You will need to enter a valid credit card in order to process your transaction. What is Outside+? The Outside+ membership includes access to online content across over 30 brands, members-only TV shows and films, expert courses, and mapping maps. You can find all the benefits of the Outside+ membership here . How can I access my other benefits as an Outside+ member? We are working to get your benefits listed in your profile! In the meantime, you do not",
+    "tool_hit": true,
+    "judge": {
+      "groundedness": 5.0,
+      "voice": 5.0,
+      "helpfulness": 5.0,
+      "tool_use": 5.0,
+      "overall": 5.0,
+      "rationale": "The answer clearly distinguishes between perks and benefits using the provided context and tool outputs, maintaining a confident and expert tone throughout."
+    },
+    "error": null
+  }
+]

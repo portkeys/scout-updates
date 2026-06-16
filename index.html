@@ -1149,6 +1149,187 @@
     <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 100%;"></div></div><span>9 / 9</span></div></div>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- ===============  UPDATE · JUNE 2026 CHAPTER  =============== -->
+  <!-- ============================================================ -->
+
+  <!-- Slide 10: June 2026 chapter cover -->
+  <section class="slide title-slide" data-section="June 2026 · Cover">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta" style="color: rgba(255,255,255,0.6);">Update · June 2026</div>
+    </div>
+    <div class="hero">
+      <div class="kicker" style="color: var(--outside-primary); font-size: 0.95rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; margin-bottom: 3vh;">New chapter · June 2026</div>
+      <h1>Scout now answers <span class="accent">customer support.</span></h1>
+      <p class="lede" style="color: rgba(255,255,255,0.8); max-width: 58ch; margin-top: 3vh;">Account, billing, login, and membership questions now route to the Outside Help Center — a dedicated ZenDesk retrieval path, kept separate from editorial content, with its own eval coverage.</p>
+      <div class="cover-upgrades">
+        <div class="upg">
+          <span class="upg-num">01</span>
+          <span class="upg-name">ZenDesk Help Center retrieval</span>
+        </div>
+        <div class="upg">
+          <span class="upg-num">02</span>
+          <span class="upg-name">search_help_center tool + routing</span>
+        </div>
+        <div class="upg">
+          <span class="upg-num">03</span>
+          <span class="upg-name">Support Q&amp;A eval coverage</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer" style="color: rgba(255,255,255,0.5);">
+      <div></div>
+      <div class="right"><span>10 / 13</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 11: How the Help Center integration works -->
+  <section class="slide dark" data-section="Help Center">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">11 — How it works</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">The ZenDesk Help Center pipeline</h1>
+      <h2>A second retrieval path, deliberately unlike the editorial one.</h2>
+
+      <div class="mech-list">
+        <div class="mech">
+          <div class="rank">01</div>
+          <div class="body">
+            <h4>~700 articles, embedded straight from the ZenDesk API</h4>
+            <p>A monthly sync batch-embeds every Help Center article into a dedicated Pinecone <strong style="color:#FFFFFF;">zendesk namespace</strong> — no Postgres round-trip. Support content stays isolated from editorial vectors.</p>
+          </div>
+        </div>
+        <div class="mech">
+          <div class="rank">02</div>
+          <div class="body">
+            <h4>search_help_center function tool</h4>
+            <p>The agent calls it for account / billing / login / membership questions. Cosine-only ranking — <strong style="color:#FFFFFF;">no recency decay, no query rewrite</strong>: help articles are evergreen, and raw support phrasing embeds better than an editorial-style rewrite.</p>
+          </div>
+        </div>
+        <div class="mech">
+          <div class="rank">03</div>
+          <div class="body">
+            <h4>Prompt-level routing</h4>
+            <p>The system prompt sends support questions to the Help Center and keeps gear / trail / training on the editorial RAG context — so the two corpora never cross-contaminate a single answer.</p>
+          </div>
+        </div>
+        <div class="mech">
+          <div class="rank">04</div>
+          <div class="body">
+            <h4>Help articles return as cited source cards</h4>
+            <p>Retrieved articles ride back on the <span class="code-callout">completed</span> frame and render as source cards, deduped by URL alongside any editorial sources.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 85%;"></div></div><span>11 / 13</span></div></div>
+  </section>
+
+  <!-- Slide 12: Support eval results -->
+  <section class="slide" data-section="Support Eval">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">12 — New eval category</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">Chat eval · new category · support</h1>
+      <h2>4/4 routed to the Help Center. 5.0 on every judged dimension.</h2>
+
+      <p style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--outside-text-muted);font-weight:700;margin:2vh 0 1vh 0;">Support Q&amp;A eval · gpt-4o-mini · LLM judge gpt-4o</p>
+      <div class="kpi-row" style="margin: 0 0 2.5vh 0;">
+        <div class="kpi">
+          <div class="cat">Tool routing</div>
+          <div class="nums"><span class="after">4/4</span></div>
+          <div class="desc">Every support question called <span class="code-callout">search_help_center</span>.</div>
+        </div>
+        <div class="kpi">
+          <div class="cat">Judge · overall</div>
+          <div class="nums"><span class="after">5.0</span></div>
+          <div class="desc">Groundedness · Voice · Helpfulness · Tool-use all 5.0.</div>
+        </div>
+        <div class="kpi">
+          <div class="cat">Grounded in real articles</div>
+          <div class="nums"><span class="after">100%</span></div>
+          <div class="desc">Answers cite retrieved Help Center content — not guesses.</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--outside-text-muted);font-weight:700;margin:0 0 1vh 0;">The four fixtures · the regression net for support routing</p>
+      <table class="queries">
+        <thead>
+          <tr>
+            <th style="width: 34%;">Support query</th>
+            <th style="width: 30%;">Help Center article retrieved</th>
+            <th>tool_hit</th>
+            <th>Judge overall</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="q">How do I cancel my Outside+ membership?</td>
+            <td class="lab">Cancel your Outside+ membership (stop auto-renewal)</td>
+            <td class="lab"><span class="pill">hit</span></td>
+            <td class="lab"><strong>5.0</strong></td>
+          </tr>
+          <tr>
+            <td class="q">I was charged twice — how do I get a refund?</td>
+            <td class="lab">Refunds for App Store / Google Play subscriptions</td>
+            <td class="lab"><span class="pill">hit</span></td>
+            <td class="lab"><strong>5.0</strong></td>
+          </tr>
+          <tr>
+            <td class="q">I can't log in and need to reset my password.</td>
+            <td class="lab">Reset your password / locked-out account</td>
+            <td class="lab"><span class="pill">hit</span></td>
+            <td class="lab"><strong>5.0</strong></td>
+          </tr>
+          <tr>
+            <td class="q">What's the difference between Outside+ perks and benefits?</td>
+            <td class="lab">My Benefits &gt; Member Perks explainer</td>
+            <td class="lab"><span class="pill">hit</span></td>
+            <td class="lab"><strong>5.0</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 92%;"></div></div><span>12 / 13</span></div></div>
+  </section>
+
+  <!-- Slide 13: A real case + what the eval caught -->
+  <section class="slide warm" data-section="Support Case">
+    <div class="topbar">
+      <div class="brand"><span class="mark">OUTSIDE</span><span class="sub">/ SCOUT</span></div>
+      <div class="meta">13 — What it looks like</div>
+    </div>
+    <div class="slide-body">
+      <h1 class="kicker">A representative support turn</h1>
+      <h2>Real retrieval, grounded answer — and a bug the eval caught.</h2>
+
+      <div class="case-box">
+        <div class="q-label">Support query</div>
+        <div class="q-text">How do I cancel my Outside+ membership?</div>
+        <div class="compare" style="margin-top:1.5vh;">
+          <div class="col main">
+            <h4>Editorial RAG · nothing relevant</h4>
+            <div class="row"><span>No gear / trail / training match</span><span class="yr" style="background:var(--outside-border);color:var(--outside-text-muted);">none</span></div>
+            <div class="row"><span>Old behavior: model improvises</span><span class="yr" style="background:var(--outside-border);color:var(--outside-text-muted);">risky</span></div>
+          </div>
+          <div class="col lab">
+            <h4>Help Center · search_help_center</h4>
+            <div class="row"><span>"Cancel your Outside+ membership"</span><span class="yr">ZenDesk</span></div>
+            <div class="row"><span>Access retained until period end</span><span class="yr">cited</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="fineprint"><strong style="color:var(--outside-text);">What the eval caught:</strong> the offline chat-eval ran the agent without threading the RAG client into the tool's run context, so <span class="code-callout">search_help_center</span> silently returned "no results" while <span class="code-callout">tool_hit</span> still reported 4/4 — the judge was scoring answers improvised from general knowledge. We wired the RAG-backed run context (matching production) and added a regression test, so the eval now measures grounding, not just routing. <strong style="color:var(--outside-text);">Caveat:</strong> single run, n=4, LLM-judge — directional, not a gate. One fixture hit a 608s OpenAI retry spike; the other three answered in 4–7s.</p>
+    </div>
+    <div class="footer"><div></div><div class="right"><div class="progress"><div class="bar" style="width: 100%;"></div></div><span>13 / 13</span></div></div>
+  </section>
+
 </div>
 
 <div class="nav">
@@ -1161,6 +1342,17 @@
   let idx = 0;
   const prevBtn = document.getElementById('prev');
   const nextBtn = document.getElementById('next');
+
+  // Auto-number footer counters + progress bars from the live slide count, so
+  // appending a new monthly chapter stays consistent without hand-editing
+  // every prior slide's "X / N" and bar width.
+  const total = slides.length;
+  slides.forEach((s, i) => {
+    const counter = s.querySelector('.footer .right span');
+    if (counter) counter.textContent = `${i + 1} / ${total}`;
+    const bar = s.querySelector('.footer .progress .bar');
+    if (bar) bar.style.width = `${Math.round(((i + 1) / total) * 100)}%`;
+  });
 
   function show(i) {
     idx = Math.max(0, Math.min(slides.length - 1, i));
